@@ -2,6 +2,7 @@ package com.example.buscabombas;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +16,9 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
     Cell[][] myBoard;
 
+    Button[] buttons;
 
+    //TEST TEST TEST
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
         TableRow[] rows = new TableRow[numberOfRows];
 
-        Button[] buttons = new Button[amountOfButtons];
+        buttons = new Button[amountOfButtons];
 
         for (int i = 0; i < numberOfRows; i++) {
 
@@ -218,7 +221,10 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
             btn.setText("B");
         }
         else{
-            btn.setText(Integer.toString(getSurroundingBombs(clickedCell)));
+           // btn.setText(Integer.toString(getSurroundingBombs(clickedCell)));
+
+
+            discoverCells(   getCell(btn.getId())    );
         }
 
 
@@ -239,6 +245,23 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
             }
         }
         return null;
+
+    }
+
+
+    public Button getButton(int id){
+
+        for (int i = 0; i < buttons.length ; i++) {
+
+
+
+                if(buttons[i].getId()==id){
+                    return buttons[i];
+                }
+
+        }
+        return null;
+
 
     }
 
@@ -309,6 +332,39 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
         return surroundingCells;
 
+    }
+    
+    
+    
+    public void discoverCells (Cell cell) {
+        
+        
+        if(getSurroundingBombs(cell)==0 && !cell.isChecked) {
+
+            cell.setChecked(true);
+
+            for (Cell nextCells: getSurroundingCells(cell)
+                 ) {
+
+                discoverCells(nextCells);
+            }
+
+        }
+        else {
+
+            if(getSurroundingBombs(cell) == 0)
+            {
+                getButton(  cell.getId()).setBackgroundColor(Color.DKGRAY)   ;
+            }
+
+            if(getSurroundingBombs(cell) > 0)
+            {
+                getButton(cell.getId()).setText(    Integer.toString(getSurroundingBombs(cell))     );
+            }
+
+
+
+        }
     }
 
 

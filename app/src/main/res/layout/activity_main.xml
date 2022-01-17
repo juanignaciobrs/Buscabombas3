@@ -18,4 +18,66 @@
 
 
     </TableLayout>
+
+    <Button
+        android:id="@+id/changeActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="39dp"
+        android:text="Button"
+        app:layout_constraintBottom_toTopOf="@+id/frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:layout_width="196dp"
+        android:layout_height="259dp"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+       android:background="@color/white">
+
+        <RadioButton
+            android:id="@+id/principiante"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+            android:buttonTint="#1A99C4"
+            android:text="Nivel Principiante"
+
+            android:backgroundTint="@color/white"/>
+
+        <RadioButton
+            android:id="@+id/amateur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="#1A99C4"
+            android:text="Nivel Avanzado" />
+
+        <RadioButton
+            android:id="@+id/avanzado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="#1A99C4"
+            android:text="Nivel Experto" />
+
+        <Button
+            android:id="@+id/closingDificultySettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cerrar" />
+
+    </RadioGroup>
+
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

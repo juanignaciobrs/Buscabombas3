@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <item android:id="@+id/instrucciones"
+        android:title="Instrucciones"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/nuevojuego"
+        android:title="Nuevo Juego"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/configuracion"
+        android:title="Dificultad"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/personaje"
+        android:title="Selecciona personaje"
+        app:showAsAction="never"
+        />
+
+
+
+
+
+
+
+
+
+
+
+
+
+</menu>

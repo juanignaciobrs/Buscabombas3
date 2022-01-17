@@ -1,37 +1,80 @@
 package com.example.buscabombas;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
-public class MainActivity extends AppCompatActivity   implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity   implements View.OnClickListener, View.OnLongClickListener {
 
 
     Cell[][] myBoard;
 
     Button[] buttons;
+    TableRow[] rows;
 
+    int gameState = 1;
+
+    boolean gameOn = true;
     //TEST TEST TEST
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
-
-
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         TableLayout frame = (TableLayout) findViewById(R.id.frame);;
+
+        Button activity = (Button) findViewById(R.id.changeActivity);
+
+        activity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                gameState = 3;
+                System.out.println(gameState);
+
+                frame.removeAllViews();
+
+                if(gameState==2) {
+                    generateButtons(12,12,86,100, frame);
+
+                    generateBoard(12,30);
+
+
+
+                }
+                if(gameState==3) {
+                    generateButtons(16,16,65,100, frame);
+
+                    generateBoard(16,60);
+
+
+
+                }
+            }
+        });
+
+
+
+        if(gameState==1){
 
 
     generateButtons(8,8,130,130, frame);
@@ -40,39 +83,68 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
 
 
-    System.out.println("QUEEEE:" + getSurroundingCells(myBoard[0][0]).size());
-
-
-    System.out.println("GET SURROUNDING BOMBSSSS:");
-    getSurroundingBombs(myBoard[2][2]);
-
-/* ArrayList<Integer[]> randomCoordinates  = new ArrayList<>();
-
-        Integer [] array = new Integer [2];
-
-        array[0] = 22;
-
-        array[1] = 3;
-
-        randomCoordinates.add(array);
-
-        System.out.println("EEEEEEY" + randomCoordinates.get(0)[0]);*/
+        }
 
 
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.appbar_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
 
-    public void generateButtons(int buttonsPerRow, int numberOfRows, int buttonWidth, int buttonHeight, TableLayout frame) {
+        int integerID = item.getItemId();
+
+        switch (integerID){
+
+
+            case R.id.instrucciones:
+
+                System.out.println("Instrucciones");
+
+                message();
+
+                return true;
+
+
+
+            case R.id.nuevojuego:
+
+                System.out.println("Nuevo Juego");
+
+                return true;
+
+            case R.id.configuracion:
+
+                System.out.println("Configuración");
+                return true;
+
+            case R.id.personaje:
+                System.out.println("Personaje");
+                return true;
+
+
+            default:  return false;
+
+
+
+        }
+    }
+
+    public  void generateButtons(int buttonsPerRow, int numberOfRows, int buttonWidth, int buttonHeight, TableLayout frame) {
 
         int amountOfButtons = buttonsPerRow * numberOfRows;
 
         int counter = 0;
 
-
-
-        TableRow[] rows = new TableRow[numberOfRows];
+        rows = new TableRow[numberOfRows];
 
         buttons = new Button[amountOfButtons];
 
@@ -95,6 +167,11 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
                 buttons[counter].setId(counter);
 
                 buttons[counter].setOnClickListener(this);
+
+                buttons[counter].setOnLongClickListener(this);
+
+                buttons[counter].setBackgroundColor(Color.GRAY);
+
 
                 rows[i].addView(buttons[counter]);
                 counter++;
@@ -122,7 +199,6 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
     }
 
-
     public void randomBombs(int rowsNumber, int numberOfBombs) {
 
 
@@ -147,7 +223,6 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
         }
 
     }
-
 
     private boolean listContains (ArrayList <int[]> list, int i, int j) {
         for ( int[] pair:list) {
@@ -218,7 +293,8 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
         if(clickedCell.isBomb()
         ) {
-            btn.setText("B");
+            btn.setText("X");
+            btn.setEnabled(false);
         }
         else{
            // btn.setText(Integer.toString(getSurroundingBombs(clickedCell)));
@@ -229,6 +305,30 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
 
 
+    }
+
+    public boolean onLongClick (View view) {
+
+        Button btn = (Button) view;
+
+        Cell clickedCell = getCell( btn.getId() );
+
+        if(clickedCell.isBomb) {
+
+            btn.setText("B!");
+
+            btn.setEnabled(false);
+            return false;
+        }
+        if(!clickedCell.isBomb){
+
+            btn.setText("LST");
+            btn.setEnabled(false);
+            return false;
+        }
+
+
+        return false;
     }
 
     public Cell getCell(int id) {
@@ -247,7 +347,6 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
         return null;
 
     }
-
 
     public Button getButton(int id){
 
@@ -333,16 +432,14 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
         return surroundingCells;
 
     }
-    
-    
-    
+
     public void discoverCells (Cell cell) {
         
         
         if(getSurroundingBombs(cell)==0 && !cell.isChecked) {
 
             cell.setChecked(true);
-
+            //getButton(cell.getId()).setEnabled(false);
             for (Cell nextCells: getSurroundingCells(cell)
                  ) {
 
@@ -355,11 +452,13 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
             if(getSurroundingBombs(cell) == 0)
             {
                 getButton(  cell.getId()).setBackgroundColor(Color.DKGRAY)   ;
+                getButton(cell.getId()).setEnabled(false);
             }
 
             if(getSurroundingBombs(cell) > 0)
             {
                 getButton(cell.getId()).setText(    Integer.toString(getSurroundingBombs(cell))     );
+                getButton(cell.getId()).setEnabled(false);
             }
 
 
@@ -367,5 +466,28 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
         }
     }
 
+    public void message(){
+
+        AlertDialog.Builder dialogueBuilder = new AlertDialog.Builder(this);
+
+        dialogueBuilder.setMessage("Se trata de una copia del buscaminas. \n" +
+                " Cuando pulsas en una casilla, sale un número que identifica cuantas" +
+                "bombas hay alrrededor" +
+                ". Si pulsas encima de una bomba pierdes. Si crees que hay una bomba haz click largo para desactivarla." +
+                "Si haces click largo en una casilla donde no hay una bomba pierdes" +
+                "\n Ganas después de encontrar todas las bombas")
+                .setTitle("Instrucciones")
+                .setCancelable(true)
+                .setPositiveButton(
+                        "Ok",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        dialogueBuilder.show();
+
+    }
 
 }

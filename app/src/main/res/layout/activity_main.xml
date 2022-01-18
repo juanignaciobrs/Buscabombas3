@@ -8,11 +8,13 @@
 
     <TableLayout
         android:id="@+id/frame"
-        android:layout_width="389dp"
-        android:layout_height="433dp"
+        android:layout_width="407dp"
+        android:layout_height="620dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="60dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.727"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -31,15 +33,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
+        android:id="@+id/difficultyRadio"
         android:layout_width="196dp"
         android:layout_height="259dp"
+        android:background="@color/white"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-       android:background="@color/white">
+        tools:visibility="gone">
 
         <RadioButton
             android:id="@+id/principiante"
@@ -47,18 +51,10 @@
             android:layout_height="wrap_content"
 
             android:layout_weight="1"
+            android:backgroundTint="@color/white"
             android:buttonTint="#1A99C4"
-            android:text="Nivel Principiante"
 
-            android:backgroundTint="@color/white"/>
-
-        <RadioButton
-            android:id="@+id/amateur"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:buttonTint="#1A99C4"
-            android:text="Nivel Avanzado" />
+            android:text="Nivel Principiante" />
 
         <RadioButton
             android:id="@+id/avanzado"
@@ -66,14 +62,22 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:buttonTint="#1A99C4"
-            android:text="Nivel Experto" />
+            android:text="Nivel Avanzado" />
 
-        <Button
-            android:id="@+id/closingDificultySettings"
+        <RadioButton
+            android:id="@+id/experto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cerrar" />
+            android:buttonTint="#1A99C4"
+            android:text="Nivel Experto" />
+
+        <Button
+            android:id="@+id/confirmLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Confirmar" />
 
     </RadioGroup>
 

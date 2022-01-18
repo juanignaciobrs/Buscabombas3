@@ -6,12 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
@@ -26,7 +31,13 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
     Button[] buttons;
     TableRow[] rows;
 
-    int gameState = 1;
+    TableLayout frame;
+
+    int gameLevel = 1;
+
+    int numberOfBombs = 10;
+
+    int discoveredBombs = 0;
 
     boolean gameOn = true;
     //TEST TEST TEST
@@ -38,52 +49,34 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        frame = (TableLayout) findViewById(R.id.frame);;
 
-        TableLayout frame = (TableLayout) findViewById(R.id.frame);;
 
-        Button activity = (Button) findViewById(R.id.changeActivity);
 
-        activity.setOnClickListener(new View.OnClickListener() {
+        Button confirm = (Button) findViewById(R.id.confirmLevel);
+
+        confirm.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View view) {
+                RadioGroup rg = (RadioGroup) findViewById(R.id.difficultyRadio);
 
-
-                gameState = 3;
-                System.out.println(gameState);
-
-                frame.removeAllViews();
-
-                if(gameState==2) {
-                    generateButtons(12,12,86,100, frame);
-
-                    generateBoard(12,30);
+                confirmOptions();
 
 
 
-                }
-                if(gameState==3) {
-                    generateButtons(16,16,65,100, frame);
-
-                    generateBoard(16,60);
+                rg.setVisibility(View.INVISIBLE);
 
 
 
-                }
+
+                System.out.println("Confirmado");
+
             }
         });
 
 
 
-        if(gameState==1){
-
-
-    generateButtons(8,8,130,130, frame);
-
-    generateBoard(8,10);
-
-
-
-        }
+        generateLevel(1);
 
 
 
@@ -119,11 +112,16 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
                 System.out.println("Nuevo Juego");
 
+                generateLevel(gameLevel);
+
                 return true;
 
             case R.id.configuracion:
 
                 System.out.println("Configuración");
+
+                difficultyOptions();
+
                 return true;
 
             case R.id.personaje:
@@ -170,7 +168,14 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
                 buttons[counter].setOnLongClickListener(this);
 
-                buttons[counter].setBackgroundColor(Color.GRAY);
+                ShapeDrawable shapedrawable = new ShapeDrawable();
+                shapedrawable.setShape(new RectShape());
+                shapedrawable.getPaint().setColor(Color.BLACK);
+                shapedrawable.getPaint().setStrokeWidth(7f);
+                shapedrawable.getPaint().setStyle(Paint.Style.STROKE);
+                buttons[counter].setBackground(shapedrawable);
+
+
 
 
                 rows[i].addView(buttons[counter]);
@@ -295,6 +300,8 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
         ) {
             btn.setText("X");
             btn.setEnabled(false);
+
+            loseGame();
         }
         else{
            // btn.setText(Integer.toString(getSurroundingBombs(clickedCell)));
@@ -317,11 +324,19 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
             btn.setText("B!");
 
+
+
             btn.setEnabled(false);
+
+
+            discoveredBombs++;
+
+            if(discoveredBombs==numberOfBombs) winGame();
             return false;
         }
         if(!clickedCell.isBomb){
 
+            loseGame();
             btn.setText("LST");
             btn.setEnabled(false);
             return false;
@@ -439,6 +454,8 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
         if(getSurroundingBombs(cell)==0 && !cell.isChecked) {
 
             cell.setChecked(true);
+            getButton(  cell.getId()).setBackgroundColor(Color.LTGRAY)   ;
+            getButton(cell.getId()).setEnabled(false);
             //getButton(cell.getId()).setEnabled(false);
             for (Cell nextCells: getSurroundingCells(cell)
                  ) {
@@ -451,13 +468,48 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
             if(getSurroundingBombs(cell) == 0)
             {
-                getButton(  cell.getId()).setBackgroundColor(Color.DKGRAY)   ;
+                getButton(  cell.getId()).setBackgroundColor(Color.LTGRAY)   ;
                 getButton(cell.getId()).setEnabled(false);
             }
 
             if(getSurroundingBombs(cell) > 0)
             {
-                getButton(cell.getId()).setText(    Integer.toString(getSurroundingBombs(cell))     );
+                getButton(cell.getId()).setText(    Integer.toString(getSurroundingBombs(cell))  );
+
+
+                switch (getSurroundingBombs(cell)) {
+
+                    case 1:
+                        getButton(cell.getId()).setTextColor(Color.BLUE);
+                        break;
+                    case 2:
+                        getButton(cell.getId()).setTextColor(Color.GREEN);
+                        break;
+                    case 3:
+                        getButton(cell.getId()).setTextColor(Color.YELLOW);
+                        break;
+                    case 4:
+                        getButton(cell.getId()).setTextColor(Color.RED);
+                        break;
+                    case 5:
+                        getButton(cell.getId()).setTextColor(Color.RED);
+                        break;
+                    case 6:
+                        getButton(cell.getId()).setTextColor(Color.RED);
+                        break;
+                    case 7:
+                        getButton(cell.getId()).setTextColor(Color.RED);
+                        break;
+                    case 8:
+                        getButton(cell.getId()).setTextColor(Color.RED);
+                        break;
+
+
+                }
+
+
+
+
                 getButton(cell.getId()).setEnabled(false);
             }
 
@@ -490,4 +542,148 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
     }
 
+
+    public void generateLevel(int level){
+
+        switch (level) {
+
+            case 1:
+
+                System.out.println();
+
+                frame.removeAllViews();
+
+                generateButtons(8,8,130,130, frame);
+
+                generateBoard(8,10);
+
+                numberOfBombs = 10;
+
+                discoveredBombs = 0;
+
+                break;
+
+            case 2:
+                frame.removeAllViews();
+
+                generateButtons(12,12,86,100, frame);
+
+                generateBoard(12,30);
+
+                numberOfBombs = 30;
+                discoveredBombs = 0;
+
+                break;
+
+            case 3:
+                frame.removeAllViews();
+
+                generateButtons(16,16,67,95, frame);
+
+                generateBoard(16,60);
+
+                numberOfBombs = 60;
+                discoveredBombs = 0;
+
+
+                break;
+            default:
+                frame.removeAllViews();
+
+                generateButtons(8,8,130,130, frame);
+
+                generateBoard(8,10);
+
+                numberOfBombs = 10;
+                discoveredBombs = 0;
+
+
+                break;
+
+
+
+        }
+
+    }
+
+
+    public void difficultyOptions() {
+
+        RadioGroup rg = (RadioGroup) findViewById(R.id.difficultyRadio);
+
+        rg.setVisibility(View.VISIBLE);
+
+
+    }
+
+    public void confirmOptions() {
+
+
+        RadioButton principiante = findViewById(R.id.principiante);
+        RadioButton avanzado = findViewById(R.id.avanzado);
+        RadioButton experto = findViewById(R.id.experto);
+
+
+        if(principiante.isChecked()) {
+
+            gameLevel = 1;
+
+            generateLevel(1);
+
+        }
+        else if(avanzado.isChecked()){
+            gameLevel = 2;
+
+            generateLevel(2);
+        }
+        else if( experto.isChecked()){
+            gameLevel = 3;
+
+            generateLevel(3);
+        }
+
+    }
+
+
+    public void loseGame() {
+
+        AlertDialog.Builder dialogueBuilder = new AlertDialog.Builder(this);
+
+        dialogueBuilder.setMessage("¡Has perdido! No pasa nada, puedes volver a intentarlo")
+                .setTitle("Derrota")
+                .setCancelable(true)
+                .setPositiveButton(
+                        "Ok",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                generateLevel(gameLevel);
+                            }
+                        });
+
+        dialogueBuilder.show();
+
+    }
+
+
+    public void winGame(){
+        AlertDialog.Builder dialogueBuilder = new AlertDialog.Builder(this);
+
+        dialogueBuilder.setMessage("¡HAS GANADO! ENHORABUENA")
+                .setTitle("Victoria")
+                .setCancelable(true)
+                .setPositiveButton(
+                        "¡Gracias!",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                generateLevel(gameLevel);
+                            }
+                        });
+
+        dialogueBuilder.show();
+
+
+
+    }
 }

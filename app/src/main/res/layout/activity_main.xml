@@ -21,21 +21,11 @@
 
     </TableLayout>
 
-    <Button
-        android:id="@+id/changeActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="39dp"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/frame"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <RadioGroup
         android:id="@+id/difficultyRadio"
         android:layout_width="196dp"
         android:layout_height="259dp"
+        android:layout_weight="1"
         android:background="@color/white"
         android:orientation="vertical"
         android:visibility="gone"
@@ -74,6 +64,54 @@
 
         <Button
             android:id="@+id/confirmLevel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Confirmar" />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/playerRadio"
+        android:layout_width="196dp"
+        android:layout_height="259dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <RadioButton
+            android:id="@+id/bomb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:backgroundTint="@color/white"
+            android:buttonTint="#1A99C4"
+            android:drawableLeft="@drawable/bomb" />
+
+        <RadioButton
+            android:id="@+id/key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="#1A99C4"
+            android:drawableLeft="@drawable/key" />
+
+        <RadioButton
+            android:id="@+id/pill"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="#1A99C4"
+            android:drawableLeft="@drawable/pill" />
+
+        <Button
+            android:id="@+id/confirmPlayer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

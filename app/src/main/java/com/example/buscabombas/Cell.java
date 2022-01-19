@@ -4,9 +4,12 @@ public class Cell {
 
 
     public boolean isChecked;
-
-
     public boolean isBomb;
+    public int coordY;
+    public int coordX;
+    public int id;
+
+
 
     public boolean isChecked() {
         return isChecked;
@@ -32,7 +35,6 @@ public class Cell {
         this.id = id;
     }
 
-    public int coordX;
 
     public Cell(boolean isBomb) {
         this.isBomb = isBomb;
@@ -41,7 +43,7 @@ public class Cell {
         this.id = id;
     }
 
-    public int coordY;
+
 
     public void setChecked(boolean checked) {
         isChecked = checked;
@@ -68,7 +70,7 @@ public class Cell {
     }
 
 
-    public int id;
+
 
 
 

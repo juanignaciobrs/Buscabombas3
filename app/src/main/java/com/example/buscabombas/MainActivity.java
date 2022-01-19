@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
     int discoveredBombs = 0;
 
+    int activePlayer = 1;
+
+
     boolean gameOn = true;
     //TEST TEST TEST
 
@@ -63,22 +66,33 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
                 confirmOptions();
 
 
-
                 rg.setVisibility(View.INVISIBLE);
 
+                frame.setClickable(true);
+
+                System.out.println("Cerrar");
+
+                clickableButtons();
 
 
+            }
+        });
+        Button confirmPlayer = (Button) findViewById(R.id.confirmPlayer);
 
-                System.out.println("Confirmado");
+        confirmPlayer.setOnClickListener(new View.OnClickListener()  {
+            @Override
+            public void onClick(View view) {
+                RadioGroup rg = (RadioGroup) findViewById(R.id.playerRadio);
+
+                playerOptions();
+                clickableButtons();
+                rg.setVisibility(View.INVISIBLE);
+
 
             }
         });
 
-
-
         generateLevel(1);
-
-
 
     }
 
@@ -100,34 +114,30 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
             case R.id.instrucciones:
 
-                System.out.println("Instrucciones");
-
                 message();
 
                 return true;
 
-
-
             case R.id.nuevojuego:
-
-                System.out.println("Nuevo Juego");
 
                 generateLevel(gameLevel);
 
                 return true;
 
             case R.id.configuracion:
-
-                System.out.println("Configuración");
-
+                
                 difficultyOptions();
 
                 return true;
 
             case R.id.personaje:
-                System.out.println("Personaje");
-                return true;
 
+                RadioGroup rg = (RadioGroup) findViewById(R.id.playerRadio);
+
+                rg.setVisibility(View.VISIBLE);
+
+                unclickableButtons();
+                return true;
 
             default:  return false;
 
@@ -298,7 +308,17 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
         if(clickedCell.isBomb()
         ) {
-            btn.setText("X");
+            if(activePlayer==1){
+
+
+                btn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.bomb, 0, 0, 0);
+            }
+            else if(activePlayer==2){
+                btn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.key, 0, 0, 0);
+            }
+            else if(activePlayer==3){
+                btn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pill, 0, 0, 0);
+            }
             btn.setEnabled(false);
 
             loseGame();
@@ -322,16 +342,23 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
         if(clickedCell.isBomb) {
 
-            btn.setText("B!");
+            if(activePlayer==1){
 
 
-
+            btn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.bomb, 0, 0, 0);
+            }
+            else if(activePlayer==2){
+                btn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.key, 0, 0, 0);
+            }
+            else if(activePlayer==3){
+                btn.setCompoundDrawablesWithIntrinsicBounds(R.drawable.pill, 0, 0, 0);
+            }
             btn.setEnabled(false);
-
 
             discoveredBombs++;
 
             if(discoveredBombs==numberOfBombs) winGame();
+
             return false;
         }
         if(!clickedCell.isBomb){
@@ -363,7 +390,8 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
     }
 
-    public Button getButton(int id){
+    public Button getButton(int id)
+    {
 
         for (int i = 0; i < buttons.length ; i++) {
 
@@ -509,7 +537,6 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
 
 
-
                 getButton(cell.getId()).setEnabled(false);
             }
 
@@ -613,7 +640,8 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
         rg.setVisibility(View.VISIBLE);
 
-
+        unclickableButtons();
+        System.out.println("Abrir");
     }
 
     public void confirmOptions() {
@@ -660,8 +688,11 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
                                 generateLevel(gameLevel);
                             }
                         });
-
+        dialogueBuilder.setCancelable(false);
         dialogueBuilder.show();
+
+
+
 
     }
 
@@ -680,10 +711,60 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
                                 generateLevel(gameLevel);
                             }
                         });
-
+        dialogueBuilder.setCancelable(false);
         dialogueBuilder.show();
 
 
+
+    }
+
+
+    public void playerOptions() {
+
+
+        RadioButton bomb = findViewById(R.id.bomb);
+        RadioButton key = findViewById(R.id.key);
+        RadioButton pill = findViewById(R.id.pill);
+
+
+        if(bomb.isChecked()) {
+
+            activePlayer = 1;
+
+            generateLevel(gameLevel);
+
+        }
+        else if(key.isChecked()){
+            activePlayer = 2;
+
+            generateLevel(gameLevel);
+        }
+        else if( pill.isChecked()){
+            activePlayer = 3;
+
+            generateLevel(gameLevel);
+        }
+
+    }
+
+
+    public void unclickableButtons() {
+
+        for (Button b: buttons
+             ) {
+
+            b.setEnabled(false);
+        }
+
+    }
+
+    public void clickableButtons() {
+
+        for (Button b: buttons
+        ) {
+
+            b.setEnabled(true);
+        }
 
     }
 }

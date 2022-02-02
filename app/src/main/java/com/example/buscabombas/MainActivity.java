@@ -20,12 +20,15 @@ import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import com.example.buscabombas.databinding.ActivityMainBinding;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity   implements View.OnClickListener, View.OnLongClickListener {
 
 
+    private ActivityMainBinding binding;
     Cell[][] myBoard;
 
     Button[] buttons;
@@ -50,19 +53,23 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        frame = (TableLayout) findViewById(R.id.frame);;
-
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
 
 
-        Button confirm = (Button) findViewById(R.id.confirmLevel);
+        setContentView(binding.getRoot());
+
+       // frame = (TableLayout) findViewById(R.id.frame);
+
+        frame = binding.frame;
+
+        Button confirm = binding.confirmLevel;
 
         confirm.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View view) {
-                RadioGroup rg = (RadioGroup) findViewById(R.id.difficultyRadio);
 
+                RadioGroup rg = binding.difficultyRadio;
                 confirmOptions();
 
 
@@ -77,18 +84,16 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
 
             }
         });
-        Button confirmPlayer = (Button) findViewById(R.id.confirmPlayer);
+
+        Button confirmPlayer = binding.confirmPlayer;
 
         confirmPlayer.setOnClickListener(new View.OnClickListener()  {
             @Override
             public void onClick(View view) {
-                RadioGroup rg = (RadioGroup) findViewById(R.id.playerRadio);
-
+                RadioGroup rg = binding.playerRadio;
                 playerOptions();
                 clickableButtons();
                 rg.setVisibility(View.INVISIBLE);
-
-
             }
         });
 
@@ -125,7 +130,7 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
                 return true;
 
             case R.id.configuracion:
-                
+
                 difficultyOptions();
 
                 return true;
@@ -324,8 +329,6 @@ public class MainActivity extends AppCompatActivity   implements View.OnClickLis
             loseGame();
         }
         else{
-           // btn.setText(Integer.toString(getSurroundingBombs(clickedCell)));
-
 
             discoverCells(   getCell(btn.getId())    );
         }
